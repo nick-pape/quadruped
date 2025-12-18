@@ -17,6 +17,9 @@ def main():
     print("  Second number: Elbow angle (0-270)")
     print("Type 'quit' to exit\n")
     
+    robot.set_angle(Motor.FR_HIP, 60)
+    robot.set_angle(Motor.FL_HIP, 150)
+
     while True:
         try:
             command = input("Enter command: ").strip()
@@ -52,10 +55,14 @@ def main():
             if side == 'L':
                 robot.set_angle(Motor.FL_SHOULDER, shoulder_angle)
                 robot.set_angle(Motor.FL_ELBOW, elbow_angle)
+                robot.set_angle(Motor.BL_SHOULDER, shoulder_angle)
+                robot.set_angle(Motor.BL_ELBOW, elbow_angle)
                 print(f"Left side: Shoulder={shoulder_angle}°, Elbow={elbow_angle}°")
             else:
                 robot.set_angle(Motor.FR_SHOULDER, shoulder_angle)
                 robot.set_angle(Motor.FR_ELBOW, elbow_angle)
+                robot.set_angle(Motor.BR_SHOULDER, shoulder_angle)
+                robot.set_angle(Motor.BR_ELBOW, elbow_angle)
                 print(f"Right side: Shoulder={shoulder_angle}°, Elbow={elbow_angle}°")
                 
         except KeyboardInterrupt:

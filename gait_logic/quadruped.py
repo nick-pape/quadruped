@@ -1,7 +1,7 @@
 from adafruit_servokit import ServoKit
 import math
-import bezier
-import numpy as np
+#import bezier
+#import numpy as np
 from typing import Callable
 
 class Motor:
@@ -32,18 +32,18 @@ Motor.FR_SHOULDER = Motor(0x40, 8)
 Motor.BR_SHOULDER = Motor(0x40, 14)
 Motor.FR_ELBOW = Motor(0x40, 15)
 # Board 2 (0x41)
-Motor.BL_SHOULDER = Motor(0x41, 0)
-Motor.BL_ELBOW = Motor(0x41, 4)
-Motor.FL_HIP = Motor(0x41, 8)
-Motor.FL_SHOULDER = Motor(0x41, 14)
-Motor.FL_ELBOW = Motor(0x41, 15)
+Motor.BL_SHOULDER = Motor(0x60, 0)
+Motor.BL_ELBOW = Motor(0x60, 4)
+Motor.FL_HIP = Motor(0x60, 8)
+Motor.FL_SHOULDER = Motor(0x60, 14)
+Motor.FL_ELBOW = Motor(0x60, 15)
 
 class Quadruped:
     def __init__(self):
         # Initialize two servo boards
         self.kits = {
             0x40: ServoKit(channels=16, address=0x40),
-            0x41: ServoKit(channels=16, address=0x41)
+            0x60: ServoKit(channels=16, address=0x60)
         }
         self.upper_leg_length = 10
         self.lower_leg_length = 10.5
@@ -160,7 +160,7 @@ class Quadruped:
         if leg_id == 'BR':
             self.inverse_positioning(Motor.BR_SHOULDER, Motor.BR_ELBOW, x, y, right=True)
     
-    def move(self, controller: Callable[[np.ndarray], np.ndarray] | None = None):
+    def move(self, controller = None):
         """
         Walks around based on the controller inputted momentum
         :param controller: the controller that is called to determine the robot momentum
