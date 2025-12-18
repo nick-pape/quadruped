@@ -10,38 +10,40 @@ class Motor:
         self.board_address = board_address
         self.channel = channel
 
-    # Right side motors (board 0x40)
-    FR_SHOULDER: "Motor"
-    FR_ELBOW: "Motor"
+    # Board 1 (0x40) motors
     FR_HIP: "Motor"
-    BR_SHOULDER: "Motor"
     BR_ELBOW: "Motor"
+    FR_SHOULDER: "Motor"
+    BR_SHOULDER: "Motor"
+    FR_ELBOW: "Motor"
 
-    # Left side motors (board 0x80)
-    FL_SHOULDER: "Motor"
-    FL_ELBOW: "Motor"
-    FL_HIP: "Motor"
+    # Board 2 (0x41) motors
     BL_SHOULDER: "Motor"
     BL_ELBOW: "Motor"
+    FL_HIP: "Motor"
+    FL_SHOULDER: "Motor"
+    FL_ELBOW: "Motor"
 
 # Initialize motor constants
-Motor.FR_SHOULDER = Motor(0x40, 0)
-Motor.FR_ELBOW = Motor(0x40, 1)
-Motor.FR_HIP = Motor(0x40, 2)
-Motor.BR_SHOULDER = Motor(0x40, 3)
-Motor.BR_ELBOW = Motor(0x40, 4)
-Motor.FL_SHOULDER = Motor(0x80, 0)
-Motor.FL_ELBOW = Motor(0x80, 1)
-Motor.FL_HIP = Motor(0x80, 2)
-Motor.BL_SHOULDER = Motor(0x80, 3)
-Motor.BL_ELBOW = Motor(0x80, 4)
+# Board 1 (0x40)
+Motor.FR_HIP = Motor(0x40, 4)
+Motor.BR_ELBOW = Motor(0x40, 7)
+Motor.FR_SHOULDER = Motor(0x40, 8)
+Motor.BR_SHOULDER = Motor(0x40, 14)
+Motor.FR_ELBOW = Motor(0x40, 15)
+# Board 2 (0x41)
+Motor.BL_SHOULDER = Motor(0x41, 0)
+Motor.BL_ELBOW = Motor(0x41, 4)
+Motor.FL_HIP = Motor(0x41, 8)
+Motor.FL_SHOULDER = Motor(0x41, 14)
+Motor.FL_ELBOW = Motor(0x41, 15)
 
 class Quadruped:
     def __init__(self):
         # Initialize two servo boards
         self.kits = {
             0x40: ServoKit(channels=16, address=0x40),
-            0x80: ServoKit(channels=16, address=0x80)
+            0x41: ServoKit(channels=16, address=0x41)
         }
         self.upper_leg_length = 10
         self.lower_leg_length = 10.5
