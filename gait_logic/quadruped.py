@@ -1,38 +1,69 @@
 from adafruit_servokit import ServoKit
-from enum import IntEnum
 import math
 import bezier
 import numpy as np
+from typing import Callable
 
-class Motor(IntEnum):
-    # identifies the corresponding pin location with the motor location
-    FR_SHOULDER = 0
-    FR_ELBOW = 1
-    FR_HIP = 2
-    FL_SHOULDER = 3
-    FL_ELBOW = 4
-    FL_HIP = 5
-    BR_SHOULDER = 6
-    BR_ELBOW = 7
-    BL_SHOULDER = 8
-    BL_ELBOW = 9
+class Motor:
+    """Represents a motor with a board address and channel number"""
+    def __init__(self, board_address: int, channel: int):
+        self.board_address = board_address
+        self.channel = channel
+
+    # Right side motors (board 0x40)
+    FR_SHOULDER: "Motor"
+    FR_ELBOW: "Motor"
+    FR_HIP: "Motor"
+    BR_SHOULDER: "Motor"
+    BR_ELBOW: "Motor"
+
+    # Left side motors (board 0x80)
+    FL_SHOULDER: "Motor"
+    FL_ELBOW: "Motor"
+    FL_HIP: "Motor"
+    BL_SHOULDER: "Motor"
+    BL_ELBOW: "Motor"
+
+# Initialize motor constants
+Motor.FR_SHOULDER = Motor(0x40, 0)
+Motor.FR_ELBOW = Motor(0x40, 1)
+Motor.FR_HIP = Motor(0x40, 2)
+Motor.BR_SHOULDER = Motor(0x40, 3)
+Motor.BR_ELBOW = Motor(0x40, 4)
+Motor.FL_SHOULDER = Motor(0x80, 0)
+Motor.FL_ELBOW = Motor(0x80, 1)
+Motor.FL_HIP = Motor(0x80, 2)
+Motor.BL_SHOULDER = Motor(0x80, 3)
+Motor.BL_ELBOW = Motor(0x80, 4)
 
 class Quadruped:
     def __init__(self):
-        self.kit = ServoKit(channels=16)
+        # Initialize two servo boards
+        self.kits = {
+            0x40: ServoKit(channels=16, address=0x40),
+            0x80: ServoKit(channels=16, address=0x80)
+        }
         self.upper_leg_length = 10
         self.lower_leg_length = 10.5
-        for i in range(10):
-            self.kit.servo[i].set_pulse_width_range(500,2500)
+        
+        # Configure all motors
+        motors = [
+            Motor.FR_SHOULDER, Motor.FR_ELBOW, Motor.FR_HIP,
+            Motor.FL_SHOULDER, Motor.FL_ELBOW, Motor.FL_HIP,
+            Motor.BR_SHOULDER, Motor.BR_ELBOW,
+            Motor.BL_SHOULDER, Motor.BL_ELBOW
+        ]
+        for motor in motors:
+            self.kits[motor.board_address].servo[motor.channel].set_pulse_width_range(500, 2500)
 
-    def set_angle(self,motor_id, degrees):
+    def set_angle(self, motor, degrees):
         """
         set the angle of a specific motor to a given angle
-        :param motor_id: the motor id
+        :param motor: the Motor object
         :param degrees: the angle to put the motor to
         :returns: void
         """
-        self.kit.servo[motor_id].angle = degrees
+        self.kits[motor.board_address].servo[motor.channel].angle = degrees
 
     def rad_to_degree(self,rad):
         """
@@ -127,12 +158,14 @@ class Quadruped:
         if leg_id == 'BR':
             self.inverse_positioning(Motor.BR_SHOULDER, Motor.BR_ELBOW, x, y, right=True)
     
-    def move(self, controller=None):
+    def move(self, controller: Callable[[np.ndarray], np.ndarray] | None = None):
         """
         Walks around based on the controller inputted momentum
         :param controller: the controller that is called to determine the robot momentum
         :returns: None, enters an infinite loop 
         """
+        if controller is None:
+            raise ValueError("Controller must be provided")
         momentum = np.asarray([0,0,1,0],dtype=np.float32)
         index = 0
         
