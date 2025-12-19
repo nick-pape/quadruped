@@ -67,6 +67,8 @@ def run_bl_angles(
                     elbow = clamp(elbow)
                 robot.set_angle(Motor.BL_SHOULDER, shoulder)
                 robot.set_angle(Motor.BL_ELBOW, elbow)
+                robot.set_angle(Motor.FL_SHOULDER, shoulder)
+                robot.set_angle(Motor.FL_ELBOW, elbow)
 
                 if br_angles:
                     a_br = br_angles[i % len(br_angles)]
