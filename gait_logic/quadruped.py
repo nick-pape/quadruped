@@ -108,8 +108,14 @@ class Quadruped:
         y_prime = -math.sqrt((z+L)**2 + y**2)
         thetaz = math.atan2(z+L,abs(y))-math.atan2(L,abs(y_prime))
 
-        elbow_offset = 20
-        shoulder_offset = 10
+        # Side-specific servo offsets: keep right as-is, tune left to better
+        # align IK mid-pose with calibrate() for BL/FL.
+        if right:
+            shoulder_offset = 10
+            elbow_offset = 20
+        else:
+            shoulder_offset = 16
+            elbow_offset = 28
         a1 = self.upper_leg_length
         a2 = self.lower_leg_length
 
