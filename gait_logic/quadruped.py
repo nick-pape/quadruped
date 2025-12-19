@@ -80,16 +80,27 @@ class Quadruped:
         sets the robot into the default "middle position" use this for attaching legs in right location
         :returns: void
         """
-        self.set_angle(Motor.FR_SHOULDER, 60)
-        self.set_angle(Motor.FR_ELBOW, 90)
-        self.set_angle(Motor.FR_HIP, 90)
-        self.set_angle(Motor.FL_SHOULDER, 120)
-        self.set_angle(Motor.FL_ELBOW, 90)
-        self.set_angle(Motor.FL_HIP, 90)
-        self.set_angle(Motor.BR_SHOULDER, 60)
-        self.set_angle(Motor.BR_ELBOW, 90)
-        self.set_angle(Motor.BL_SHOULDER, 120)
-        self.set_angle(Motor.BL_ELBOW, 90)    
+        # self.set_angle(Motor.FR_SHOULDER, 60)
+        # self.set_angle(Motor.FR_ELBOW, 90)
+        # self.set_angle(Motor.FR_HIP, 90)
+        # self.set_angle(Motor.FL_SHOULDER, 120)
+        # self.set_angle(Motor.FL_ELBOW, 90)
+        # self.set_angle(Motor.FL_HIP, 90)
+        # self.set_angle(Motor.BR_SHOULDER, 60)
+        # self.set_angle(Motor.BR_ELBOW, 90)
+        # self.set_angle(Motor.BL_SHOULDER, 120)
+        # self.set_angle(Motor.BL_ELBOW, 90)    
+        
+        self.set_angle(Motor.FR_SHOULDER, 0)
+        self.set_angle(Motor.FR_ELBOW, 0)
+        self.set_angle(Motor.FR_HIP, 60)
+        self.set_angle(Motor.FL_SHOULDER, 180)
+        self.set_angle(Motor.FL_ELBOW, 0)
+        self.set_angle(Motor.FL_HIP, 150)
+        self.set_angle(Motor.BR_SHOULDER, 0)
+        self.set_angle(Motor.BR_ELBOW, 0)
+        self.set_angle(Motor.BL_SHOULDER, 180)
+        self.set_angle(Motor.BL_ELBOW, 0)  
 
     def inverse_positioning(self, shoulder, elbow, x, y, z=0, hip=None, right=True):
         '''
