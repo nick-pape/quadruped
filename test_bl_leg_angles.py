@@ -62,7 +62,6 @@ def run_bl_angles(robot: Quadruped, angles: List[Dict[str, float]], hz: float, l
                 break
     except KeyboardInterrupt:
         print("\nInterrupted. Returning to calibration.")
-        robot.calibrate()
         time.sleep(0.5)
 
 
