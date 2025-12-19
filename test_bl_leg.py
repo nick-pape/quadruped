@@ -46,7 +46,7 @@ def run_bl_gait(robot: Quadruped, points: List[Dict[str, float]], hz: float, loo
     try:
         while True:
             cycle += 1
-            for i in len(points):
+            for i in range(len(points)):
                 p = points[i]
                 r = points[(i+(len(points) // 2) % len(points))]  # Opposite point for symmetry 
                 # BL leg has no hip in inverse_positioning call
