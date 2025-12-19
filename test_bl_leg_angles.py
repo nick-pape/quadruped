@@ -78,6 +78,8 @@ def main():
     robot = Quadruped()
     robot.calibrate()
     time.sleep(0.5)
+    robot.set_angle(Motor.FR_HIP, 60)
+    robot.set_angle(Motor.FL_HIP, 150)
     print(f"Loaded {len(angles)} angle frames from {args.angles}. Starting BL angle playback at {args.hz} Hz...")
 
     run_bl_angles(robot, angles, hz=args.hz, loops=args.loops, clamp_angles=(not args.no_clamp))
