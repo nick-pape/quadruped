@@ -153,11 +153,11 @@ def main():
                         help="Stance fraction in [0.55, 0.95]")
     parser.add_argument("--step-len", type=float, default=2.0, 
                         help="Forward/back half-range in cm")
-    parser.add_argument("--step-height", type=float, default=1.0, 
+    parser.add_argument("--step-height", type=float, default=2.0, 
                         help="Swing lift in cm")
     parser.add_argument("--x-center", type=float, default=0.0, 
                         help="Nominal x center in cm")
-    parser.add_argument("--y-ground", type=float, default=0.0, 
+    parser.add_argument("--y-ground", type=float, default=-16.0, 
                         help="Nominal ground y in cm")
     parser.add_argument("--y-offset", type=float, default=0.0, 
                         help="Additional global y offset in cm")
@@ -177,12 +177,12 @@ def main():
     N = len(x_profile)
     
     # Define per-leg phase offsets (crawl/wave gait)
-    # FR=0.00, RL=0.25, FL=0.50, RR=0.75 ensures only one leg in swing at a time
+    # FR=0.00, BR=0.25, FL=0.50, BL=0.75 ensures only one leg in swing at a time
     phase_offsets = {
         'FR': 0.00,
-        'RL': 0.25,
+        'BR': 0.25,
         'FL': 0.50,
-        'RR': 0.75
+        'BL': 0.75
     }
     
     # Initialize robot and calibrate
