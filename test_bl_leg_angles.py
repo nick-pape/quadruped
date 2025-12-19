@@ -50,6 +50,10 @@ def run_bl_angles(
     right_shoulder: float,
     right_elbow: float,
     br_angles: List[Dict[str, float]] = None,
+    bl_shoulder_bias: float = 0.0,
+    bl_elbow_bias: float = 0.0,
+    br_shoulder_bias: float = 0.0,
+    br_elbow_bias: float = 0.0,
 ) -> None:
     dt = 1.0 / max(hz, 1.0)
     cycle = 0
@@ -60,8 +64,8 @@ def run_bl_angles(
             frame_count = len(bl_angles)
             for i in range(frame_count):
                 a_bl = bl_angles[i]
-                shoulder = a_bl["shoulder"]
-                elbow = a_bl["elbow"]
+                shoulder = a_bl["shoulder"] + bl_shoulder_bias
+                elbow = a_bl["elbow"] + bl_elbow_bias
                 if clamp_angles:
                     shoulder = clamp(shoulder)
                     elbow = clamp(elbow)
@@ -72,8 +76,11 @@ def run_bl_angles(
 
                 if br_angles:
                     a_br = br_angles[i % len(br_angles)]
-                    r_sh = clamp(a_br["shoulder"]) if clamp_angles else a_br["shoulder"]
-                    r_el = clamp(a_br["elbow"]) if clamp_angles else a_br["elbow"]
+                    r_sh = a_br["shoulder"] + br_shoulder_bias
+                    r_el = a_br["elbow"] + br_elbow_bias
+                    if clamp_angles:
+                        r_sh = clamp(r_sh)
+                        r_el = clamp(r_el)
                 else:
                     # Stabilize right side (both front and back) to ideal angles
                     r_sh = clamp(right_shoulder) if clamp_angles else right_shoulder
@@ -101,6 +108,10 @@ def main():
     parser.add_argument("--right-angles", default=None, help="Path to BR angles JSON [{shoulder,elbow}] to move right side with gait")
     parser.add_argument("--right-shoulder", type=float, default=90.0, help="Ideal right-side shoulder angle (deg) when no --right-angles")
     parser.add_argument("--right-elbow", type=float, default=0.0, help="Ideal right-side elbow angle (deg) when no --right-angles")
+    parser.add_argument("--bl-shoulder-bias", type=float, default=0.0, help="Additive bias for BL shoulder angles")
+    parser.add_argument("--bl-elbow-bias", type=float, default=0.0, help="Additive bias for BL elbow angles")
+    parser.add_argument("--br-shoulder-bias", type=float, default=0.0, help="Additive bias for BR shoulder angles (with --right-angles)")
+    parser.add_argument("--br-elbow-bias", type=float, default=0.0, help="Additive bias for BR elbow angles (with --right-angles)")
     args = parser.parse_args()
 
     angles_bl = load_angles(args.angles)
@@ -126,6 +137,10 @@ def main():
         right_shoulder=args.right_shoulder,
         right_elbow=args.right_elbow,
         br_angles=angles_br,
+        bl_shoulder_bias=args.bl_shoulder_bias,
+        bl_elbow_bias=args.bl_elbow_bias,
+        br_shoulder_bias=args.br_shoulder_bias,
+        br_elbow_bias=args.br_elbow_bias,
     )
 
     print("Done.")
