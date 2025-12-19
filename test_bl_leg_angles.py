@@ -55,6 +55,8 @@ def run_bl_angles(robot: Quadruped, angles: List[Dict[str, float]], hz: float, l
                     elbow = clamp(elbow)
                 robot.set_angle(Motor.BL_SHOULDER, shoulder)
                 robot.set_angle(Motor.BL_ELBOW, elbow)
+                robot.set_angle(Motor.FL_SHOULDER, shoulder)
+                robot.set_angle(Motor.FL_ELBOW, elbow)
                 time.sleep(dt)
             if loops > 0 and cycle >= loops:
                 break
